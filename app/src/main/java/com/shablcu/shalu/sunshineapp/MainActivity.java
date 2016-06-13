@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,9 +19,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // frame layout
+        // set plcehlr frag in  frame layout
     }
 
     public static class PlaceholderFragment extends Fragment {
+
+      private   ArrayAdapter<String>  mForecastAdapter;
         public PlaceholderFragment() {
         }
 
@@ -39,13 +44,16 @@ public class MainActivity extends AppCompatActivity {
             List<String> weekForecast = new ArrayList<String>(Arrays.asList(data));
 
 
-            ArrayAdapter<String>mForecastAdapter = new ArrayAdapter<String>(
+           mForecastAdapter = new ArrayAdapter<String>(
                             getActivity(),
                             R.layout.list_item_forcast,
                             R.id.list_item_forecast_textview,
                             weekForecast);
 
             View rootView = inflater.inflate(R.layout.fragment_blank, container, false);
+
+            ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
+            listView.setAdapter(mForecastAdapter);
             return rootView;
         }
     }
