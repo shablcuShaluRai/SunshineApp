@@ -12,6 +12,8 @@ public class SettingActivity extends PreferenceActivity implements Preference.On
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        addPreferencesFromResource(R.xml.pref_general);
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
 
     }
 
