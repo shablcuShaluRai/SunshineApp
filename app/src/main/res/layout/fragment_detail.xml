@@ -2,10 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.shablcu.shalu.sunshineapp.DetailActivity">
+    tools:context="layout.deatil">
 
-    <!-- TODO: Update blank fragment layout -->
+
     <TextView
+        android:id="@+id/detail_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:text="@string/hello_blank_fragment" />

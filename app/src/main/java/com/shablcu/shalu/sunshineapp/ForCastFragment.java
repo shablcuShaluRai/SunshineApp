@@ -1,6 +1,7 @@
 package com.shablcu.shalu.sunshineapp;
 
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -99,10 +99,12 @@ public class ForCastFragment extends Fragment {
         listView.setAdapter(mForecastAdapter);
      listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
          @Override
-         public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+         public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+             Intent intent = new Intent(getActivity(), DetailActivity.class);
              String forcast=mForecastAdapter.getItem(position);
-             Toast.makeText(getActivity(),forcast,Toast.LENGTH_SHORT).show();
+             intent.putExtra(Intent.EXTRA_TEXT, forcast);
+             intent.putExtra("name", "salu");
+             startActivity(intent);
          }
      });
         return rootView;
