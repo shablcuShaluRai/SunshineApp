@@ -65,9 +65,8 @@ public class DetailActivity extends AppCompatActivity {
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
                 String forecastStr = intent.getStringExtra(Intent.EXTRA_TEXT);
-                String name = intent.getStringExtra("name");
                 ((TextView) rootView.findViewById(R.id.detail_text))
-                        .setText(forecastStr+name);
+                        .setText(forecastStr);
             }
 
             return rootView;
