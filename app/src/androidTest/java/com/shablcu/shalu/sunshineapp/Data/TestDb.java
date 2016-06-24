@@ -1,5 +1,6 @@
 package com.shablcu.shalu.sunshineapp.Data;
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -103,22 +104,59 @@ int columnNameIndex = c.getColumnIndex("name");
         public void testLocationTable() {
             // First step: Get reference to writable database
 
-            // Create ContentValues of what you want to insert
+            WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
+            SQLiteDatabase db = dbHelper.getWritableDatabase();
+
+
+            //second step: Create ContentValues of what you want to insert
             // (you can use the createNorthPoleLocationValues if you wish)
+            ContentValues testValues = TestUtilities.createNorthPoleLocationValues();
 
-            // Insert ContentValues into database and get a row ID back
+            //third step: Insert ContentValues into database and get a row ID back
+            long locationRowId;
+                   locationRowId = db.insert(WeatherContract.LocationEntry.TABLE_NAME, null, testValues);
 
-            // Query the database and receive a Cursor back
+           // verify  we got row back
+
+            assertTrue(locationRowId != -1);
+            // fourth step:Query the database and receive a Cursor back
+            Cursor cursor = db.query(
+                                   WeatherContract.LocationEntry.TABLE_NAME,  // Table to Query
+                                   null, // all columns
+                                   null, // Columns for the "where" clause
+                                   null, // Values for the "where" clause
+                                   null, // columns to group by
+                                   null, // columns to filter by row groups
+                                   null // sort order
+                           );
 
             // Move the cursor to a valid database row
-
-            // Validate data in resulting Cursor with the original ContentValues
+            assertTrue( "Error: No Records returned from location query", cursor.moveToFirst() );
+            // Fifth Step: Validate data in resulting Cursor with the original ContentValues
             // (you can use the validateCurrentRecord function in TestUtilities to validate the
             // query if you like)
+                    TestUtilities.validateCurrentRecord("Error: Location Query Validation Failed",
+                                   cursor, testValues);
+
 
             // Finally, close the cursor and database
+                    // Move the cursor to demonstrate that there is only one record in the database
+                           assertFalse( "Error: More than one record returned from location query",
+                                   cursor.moveToNext() );
 
+                    // Sixth Step: Close Cursor and Database
+                           cursor.close();
+                    db.close();
         }
+
+
+
+
+
+
+
+
+
 
         /*
             Students:  Here is where you will build code to test that we can insert and query the
