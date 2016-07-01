@@ -104,7 +104,7 @@ int columnNameIndex = c.getColumnIndex("name");
         public void testLocationTable() {
             insertLocation();
                 }
-            
+
         /*
             Students:  Here is where you will build code to test that we can insert and query the
             database.  We've done a lot of work for you.  You'll want to look in TestUtilities
