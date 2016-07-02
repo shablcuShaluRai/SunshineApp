@@ -1,10 +1,8 @@
 package com.shablcu.shalu.sunshineapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -22,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
-        ForCastFragment forFrag = new ForCastFragment();
+        ForecastFragment forFrag = new ForecastFragment();
         FragmentTransaction ft2 = ft.add(R.id.container, forFrag);
         ft2.commit();
     }
