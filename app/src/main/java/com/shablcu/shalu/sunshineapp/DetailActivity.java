@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 public class DetailActivity extends AppCompatActivity {
 
@@ -70,18 +69,8 @@ public class DetailActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
 
-            View rootView = inflater.inflate(R.layout.fragment_detail, container, false);
 
-            Intent intent = getActivity().getIntent();
-            if (intent != null) {
-                mForecastStr = intent.getDataString();
-            }
-            if (null != mForecastStr) {
-                ((TextView) rootView.findViewById(R.id.detail_text))
-                        .setText(mForecastStr);
-            }
-
-            return rootView;
+            return inflater.inflate(R.layout.fragment_detail, container, false);
         }
 
 
