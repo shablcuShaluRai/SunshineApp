@@ -13,6 +13,9 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
+    private final String FORECASTFRAGMENT_TAG = "FFTAG";
+
+    private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction ft = fm.beginTransaction();
         ForecastFragment forFrag = new ForecastFragment();
-        FragmentTransaction ft2 = ft.add(R.id.container, forFrag);
+        FragmentTransaction ft2 = ft.add(R.id.container, forFrag,FORECASTFRAGMENT_TAG);
         ft2.commit();
     }
 
@@ -71,6 +74,22 @@ public class MainActivity extends AppCompatActivity {
             Log.d(LOG_TAG, "Couldn't call " + location + ", no receiving apps installed!");
         }
     }
+
+
+    @Override
+     protected void onResume() {
+       super.onResume();
+            String location = Utility.getPreferredLocation( this );
+        // update the location in our second pane using the fragment manager
+            if (location != null && !location.equals(mLocation)) {
+             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+            if ( null != ff ) {
+               ff.onLocationChanged();
+          }
+               mLocation = location;
+        }
+       }
+
 }
 
 
