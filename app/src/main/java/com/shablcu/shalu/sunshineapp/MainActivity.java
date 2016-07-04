@@ -3,8 +3,6 @@ package com.shablcu.shalu.sunshineapp;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -13,19 +11,25 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
     private final String LOG_TAG = MainActivity.class.getSimpleName();
-    private final String FORECASTFRAGMENT_TAG = "FFTAG";
-
+    private static final String DETAILFRAGMENT_TAG = "DFTAG";
+    private boolean   mTwoPane;
     private String mLocation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mLocation = Utility.getPreferredLocation(this);
         setContentView(R.layout.activity_main);
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        ForecastFragment forFrag = new ForecastFragment();
-        FragmentTransaction ft2 = ft.add(R.id.container, forFrag,FORECASTFRAGMENT_TAG);
-        ft2.commit();
+        if (findViewById(R.id.weather_detail_container) != null) {
+            mTwoPane = true;
+            if (savedInstanceState == null) {
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .commit();
+            }
+        } else {
+            mTwoPane = false;
+        }
     }
 
     @Override
@@ -77,19 +81,18 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
-     protected void onResume() {
-       super.onResume();
-            String location = Utility.getPreferredLocation( this );
+    protected void onResume() {
+        super.onResume();
+        String location = Utility.getPreferredLocation( this );
         // update the location in our second pane using the fragment manager
-            if (location != null && !location.equals(mLocation)) {
-             ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentByTag(FORECASTFRAGMENT_TAG);
+        if (location != null && !location.equals(mLocation)) {
+            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if ( null != ff ) {
-               ff.onLocationChanged();
-          }
-               mLocation = location;
+                ff.onLocationChanged();
+            }
+            mLocation = location;
         }
-       }
-
+    }
 }
 
 
