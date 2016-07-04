@@ -1,6 +1,5 @@
 package com.shablcu.shalu.sunshineapp;
 
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -50,7 +49,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             WeatherContract.LocationEntry.COLUMN_COORD_LONG
     };
     private ForecastAdapter mForecastAdapter;
-
+    public interface Callback {
+        /**
+         * DetailFragmentCallback for when an item has been selected.
+         */
+         void onItemSelected(Uri dateUri);
+    }
     public ForecastFragment() {
     }
 
@@ -91,25 +95,20 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         ListView listView = (ListView) rootView.findViewById(R.id.listview_forecast);
         listView.setAdapter(mForecastAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-           @Override
 
-
+            @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 // CursorAdapter returns a cursor at the correct position for getItem(), or null
-             // if it cannot seek to that position.
-                  Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 if (cursor != null) {
-                String locationSetting = Utility.getPreferredLocation(getActivity());
-                  Intent intent = new Intent(getActivity(), DetailActivity.class)
-                  .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
-                  locationSetting, cursor.getLong(COL_WEATHER_DATE)
-                                    ));
-                   startActivity(intent);
-
+                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    ((Callback) getActivity())
+                            .onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                                    locationSetting, cursor.getLong(COL_WEATHER_DATE)
+                            ));
                 }
-
             }
-
         });
 
 
