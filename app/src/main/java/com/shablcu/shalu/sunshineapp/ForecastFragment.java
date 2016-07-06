@@ -1,5 +1,6 @@
 package com.shablcu.shalu.sunshineapp;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,7 +25,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
     // must change.
 
-
+    private final String LOG_TAG = MainActivity.class.getSimpleName();
     private ForecastAdapter mForecastAdapter;
 
         private ListView mListView;
@@ -87,12 +89,19 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateWeather();
+     //   if (id == R.id.action_refresh) {
+       //     updateWeather();
+         //   return true;
+        //}
+
+        if (id == R.id.action_map) {
+            openPreferredLocationInMap();
             return true;
         }
         return super.onOptionsItemSelected(item);
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,9 +115,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mListView = (ListView) rootView.findViewById(R.id.listview_forecast);
         mListView.setAdapter(mForecastAdapter);
 
-        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-                // if it cannot seek to that position.
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            // CursorAdapter returns a cursor at the correct position for getItem(), or null
+            // if it cannot seek to that position.
 
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
@@ -153,6 +162,30 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather() {
         SunshineSyncAdapter.syncImmediately(getActivity());
     }
+
+
+    private void openPreferredLocationInMap() {
+               // Using the URI scheme for showing a location found on a map.  This super-handy
+           // intent can is detailed in the "Common Intents" page of Android's developer site:
+               // http://developer.android.com/guide/components/intents-common.html#Maps
+            if ( null != mForecastAdapter ) {
+            Cursor c = mForecastAdapter.getCursor();
+            if ( null != c ) {
+                   c.moveToPosition(0);
+                String posLat = c.getString(COL_COORD_LAT);
+                String posLong = c.getString(COL_COORD_LONG);
+               Uri geoLocation = Uri.parse("geo:" + posLat + "," + posLong);
+                       Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(geoLocation);
+                   if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                       startActivity(intent);
+                  } else {
+                    Log.d(LOG_TAG, "Couldn't call " + geoLocation.toString() + ", no receiving apps installed!");
+                   }
+                   }
+               }
+           }
+
     @Override
         public void onSaveInstanceState(Bundle outState) {
          // When tablets rotate, the currently selected list item needs to be saved.
