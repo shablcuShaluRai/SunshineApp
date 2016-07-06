@@ -169,9 +169,12 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
             String dateText = Utility.getFormattedMonthDay(getActivity(), date);
             mFriendlyDateView.setText(friendlyDateText);
             mDateView.setText(dateText);
+
             // Read description from cursor and update view
             String description = data.getString(COL_WEATHER_DESC);
             mDescriptionView.setText(description);
+            //for accessibility
+            mIconView.setContentDescription(description);
             // Read high temperature from cursor and update view
             boolean isMetric = Utility.isMetric(getActivity());
 
